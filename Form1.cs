@@ -18,12 +18,6 @@ namespace PowerKeys
         private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
         #endregion
 
-        #region keyboard
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void keybd_event(uint bVk, uint bScan, uint dwFlags);
-        private const int VK_Key_Q = 0x51;
-        #endregion
-
         private readonly Hotkeys.GlobalHotkey ghk;
 
         public Form1()
@@ -45,36 +39,35 @@ namespace PowerKeys
 
         private void BuildAOE4Farms()
         {
-            keybd_event(VK_Key_Q, 0, 0);
-            //SendKeys.Send("q");
-            //SendKeys.Send("w");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //SendKeys.Send("q");
-            //SendKeys.Send("a");
-            //mouseClickL();
-            //mouseClickR();
-            //mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("w");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            mouseClickL();
+            mouseClickR();
+            mouseClickL();
         }
 
         protected override void WndProc(ref Message m)
