@@ -1,29 +1,29 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Hotkeys
 {
     public class GlobalHotkey
     {
-        private int modifier;
-        private int key;
-        private IntPtr hWnd;
-        private int id;
+        private readonly int modifier;
+        private readonly int key;
+        private readonly IntPtr hWnd;
+        private readonly int id;
 
         public GlobalHotkey(int modifier, Keys key, Form form)
         {
             this.modifier = modifier;
             this.key = (int)key;
-            this.hWnd = form.Handle;
-            id = this.GetHashCode();
+            hWnd = form.Handle;
+            id = GetHashCode();
         }
 
         public GlobalHotkey(Keys key, Form form)
         {
             this.key = (int)key;
-            this.hWnd = form.Handle;
-            id = this.GetHashCode();
+            hWnd = form.Handle;
+            id = GetHashCode();
         }
 
         public bool Register()

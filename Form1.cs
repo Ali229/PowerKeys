@@ -14,12 +14,12 @@ namespace PowerKeys
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
         [DllImport("user32.dll", SetLastError = true)]
-        static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+        private static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
 
-        const int KEY_DOWN_EVENT = 0x0001; //Key down flag
-        const int KEY_UP_EVENT = 0x0002; //Key up flag
+        private const int KEY_DOWN_EVENT = 0x0001; //Key down flag
+        private const int KEY_UP_EVENT = 0x0002; //Key up flag
 
-        private Hotkeys.GlobalHotkey ghk;
+        private readonly Hotkeys.GlobalHotkey ghk;
 
         public Form1()
         {
@@ -99,14 +99,19 @@ namespace PowerKeys
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
+            {
                 BuildAOE4Farms();
+            }
+
             base.WndProc(ref m);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!ghk.Unregiser())
+            {
                 MessageBox.Show("Hotkey failed to unregister!");
+            }
         }
     }
 }
