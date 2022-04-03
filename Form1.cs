@@ -6,6 +6,23 @@ namespace PowerKeys
 {
     public partial class Form1 : Form
     {
+
+        #region keyboard
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern void keybd_event(uint bVk, uint bScan, uint dwFlags, uint dwExtraInfo);
+
+        private const int VK_LSHIFT = 0xA0;
+        const int KEY_DOWN_EVENT = 0x0000; //Key down flag
+        const int KEY_UP_EVENT = 0x0002; //Key up flag
+        public static void ShiftD()
+        {
+            keybd_event(VK_LSHIFT, 0, KEY_DOWN_EVENT, 0);
+        }
+        public static void ShiftU()
+        {
+            keybd_event(VK_LSHIFT, 0, KEY_UP_EVENT, 0);
+        }
+        #endregion
         #region mouse
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags);
@@ -33,6 +50,19 @@ namespace PowerKeys
             ghk.Register();
             AllKeys.Add(ghk);
         }
+
+        #region unregister all keys
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
+            {
+                if (!ghk.Unregiser())
+                {
+                    MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
+                }
+            }
+        }
+        #endregion
 
         private void mouseClickL()
         {
@@ -88,17 +118,6 @@ namespace PowerKeys
             }
 
             base.WndProc(ref m);
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
-            {
-                if (!ghk.Unregiser())
-                {
-                    MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
-                }
-            }
         }
 
         private void Write(string msg)
