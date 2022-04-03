@@ -5,96 +5,77 @@ namespace PowerKeys
 {
     public partial class Form1 : Form
     {
+        #region mouse
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-        //Mouse actions
+        public static extern void mouse_event(uint dwFlags);
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
+        private const int MOUSEEVENTF_MIDDLEDOWN = 0x20;
+        private const int MOUSEEVENTF_MIDDLEUP = 0x40;
+        private const int MOUSEEVENTF_WHEEL = 0x800;
+        private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+        #endregion
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
-
-        private const int KEY_DOWN_EVENT = 0x0001; //Key down flag
-        private const int KEY_UP_EVENT = 0x0002; //Key up flag
+        #region keyboard
+        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern void keybd_event(uint bVk, uint bScan, uint dwFlags);
+        private const int VK_Key_Q = 0x51;
+        #endregion
 
         private readonly Hotkeys.GlobalHotkey ghk;
 
         public Form1()
         {
             InitializeComponent();
-            //ghk = new Hotkeys.GlobalHotkey(Constants.SHIFT, Keys.BrowserHome, this);
-            ghk = new Hotkeys.GlobalHotkey(Keys.OemPeriod, this);
+            ghk = new Hotkeys.GlobalHotkey(Keys.BrowserHome, this);
             ghk.Register();
         }
 
         private void mouseClickL()
         {
-            uint X = (uint)Cursor.Position.X;
-            uint Y = (uint)Cursor.Position.Y;
-
-            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
-            System.Threading.Thread.Sleep(1);
+            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP);
         }
 
         private void mouseClickR()
         {
-            uint X = (uint)Cursor.Position.X;
-            uint Y = (uint)Cursor.Position.Y;
-
-            mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, X, Y, 0, 0);
-            System.Threading.Thread.Sleep(1);
+            mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP);
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void keybd_event(uint bVk, uint bScan, uint dwFlags, uint dwExtraInfo);
-
-        private const int VK_LSHIFT = 0xA0;
-
-        public static void LeftArrow()
-        {
-            keybd_event(VK_LSHIFT, 0, KEY_DOWN_EVENT | KEY_UP_EVENT, 0);
-        }
-
-        private const int KEYEVENTF_KEYDOWN = 0x0;
-        private const int KEYEVENTF_KEYUP = 0x2;
         private void BuildAOE4Farms()
         {
-            SendKeys.Send("q");
-            SendKeys.Send("w");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            mouseClickR();
-            mouseClickL();
+            keybd_event(VK_Key_Q, 0, 0);
+            //SendKeys.Send("q");
+            //SendKeys.Send("w");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //SendKeys.Send("q");
+            //SendKeys.Send("a");
+            //mouseClickL();
+            //mouseClickR();
+            //mouseClickL();
         }
-
-        //click left mouse button
-
-
 
         protected override void WndProc(ref Message m)
         {
@@ -110,8 +91,14 @@ namespace PowerKeys
         {
             if (!ghk.Unregiser())
             {
-                MessageBox.Show("Hotkey failed to unregister!");
+                MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
             }
         }
+
+        private void Write(string msg)
+        {
+            System.Diagnostics.Debug.WriteLine(msg);
+        }
+
     }
 }
