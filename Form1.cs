@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace PowerKeys
@@ -18,6 +19,7 @@ namespace PowerKeys
         private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
         #endregion
 
+        List<Hotkeys.GlobalHotkey> AllKeys = new List<Hotkeys.GlobalHotkey>();
         private readonly Hotkeys.GlobalHotkey ghk;
 
         public Form1()
@@ -25,6 +27,11 @@ namespace PowerKeys
             InitializeComponent();
             ghk = new Hotkeys.GlobalHotkey(Keys.BrowserHome, this);
             ghk.Register();
+            AllKeys.Add(ghk);
+
+            ghk = new Hotkeys.GlobalHotkey(Keys.LaunchMail, this);
+            ghk.Register();
+            AllKeys.Add(ghk);
         }
 
         private void mouseClickL()
@@ -42,39 +49,42 @@ namespace PowerKeys
             SendKeys.Send("q");
             SendKeys.Send("w");
             mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
-            SendKeys.Send("q");
-            SendKeys.Send("a");
-            mouseClickL();
+            for (int i = 0; i < 8; i++)
+            {
+                SendKeys.Send("q");
+                SendKeys.Send("a");
+                mouseClickL();
+            }
             mouseClickR();
+            mouseClickL();
+        }
+
+        private void BuildAOE4Houses()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                SendKeys.Send("q");
+                SendKeys.Send("q");
+                mouseClickL();
+            }
             mouseClickL();
         }
 
         protected override void WndProc(ref Message m)
         {
+
             if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
             {
-                BuildAOE4Farms();
+                Keys key = (Keys)m.WParam;
+                switch (key)
+                {
+                    case Keys.BrowserHome:
+                        BuildAOE4Farms();
+                        break;
+                    case Keys.LaunchMail:
+                        BuildAOE4Houses();
+                        break;
+                }
             }
 
             base.WndProc(ref m);
@@ -82,9 +92,12 @@ namespace PowerKeys
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!ghk.Unregiser())
+            foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
             {
-                MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
+                if (!ghk.Unregiser())
+                {
+                    MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
+                }
             }
         }
 
