@@ -49,6 +49,14 @@ namespace PowerKeys
             ghk = new Hotkeys.GlobalHotkey(Keys.LaunchMail, this);
             ghk.Register();
             AllKeys.Add(ghk);
+
+            ghk = new Hotkeys.GlobalHotkey(Keys.BrowserRefresh, this);
+            ghk.Register();
+            AllKeys.Add(ghk);
+
+            ghk = new Hotkeys.GlobalHotkey(Keys.LaunchApplication1, this);
+            ghk.Register();
+            AllKeys.Add(ghk);
         }
 
         #region unregister all keys
@@ -89,6 +97,22 @@ namespace PowerKeys
             mouseClickL();
         }
 
+        private void BuildAOE4FarmsSlow()
+        {
+            SendKeys.Send("q");
+            SendKeys.Send("w");
+            mouseClickL();
+            for (int i = 0; i < 8; i++)
+            {
+                SendKeys.Send("q");
+                SendKeys.Send("a");
+                mouseClickL();
+                System.Threading.Thread.Sleep(10);
+            }
+            mouseClickR();
+            mouseClickL();
+        }
+
         private void BuildAOE4Houses()
         {
             for (int i = 0; i < 9; i++)
@@ -96,6 +120,18 @@ namespace PowerKeys
                 SendKeys.Send("q");
                 SendKeys.Send("q");
                 mouseClickL();
+            }
+            mouseClickL();
+        }
+
+        private void BuildAOE4HousesSlow()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                SendKeys.Send("q");
+                SendKeys.Send("q");
+                mouseClickL();
+                System.Threading.Thread.Sleep(10);
             }
             mouseClickL();
         }
@@ -113,6 +149,12 @@ namespace PowerKeys
                         break;
                     case Keys.LaunchMail:
                         BuildAOE4Houses();
+                        break;
+                    case Keys.BrowserRefresh:
+                        BuildAOE4FarmsSlow();
+                        break;
+                    case Keys.LaunchApplication1:
+                        BuildAOE4HousesSlow();
                         break;
                 }
             }
