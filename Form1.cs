@@ -50,14 +50,6 @@ namespace PowerKeys
             ghk = new Hotkeys.GlobalHotkey(Keys.LaunchMail, this);
             ghk.Register();
             AllKeys.Add(ghk);
-
-            /*ghk = new Hotkeys.GlobalHotkey(Keys.BrowserBack, this);
-            /ghk.Register();
-            AllKeys.Add(ghk);
-
-            ghk = new Hotkeys.GlobalHotkey(Keys.LaunchApplication1, this);
-            ghk.Register();
-            AllKeys.Add(ghk);*/
         }
 
         #region unregister all keys
@@ -98,51 +90,15 @@ namespace PowerKeys
             mouseClickL();
         }
 
-        private void BuildAOE4FarmsSlow()
-        {
-            SendKeys.Send("q");
-            SendKeys.Send("w");
-            mouseClickL();
-            for (int i = 0; i < 8; i++)
-            {
-                SendKeys.Send("q");
-                SendKeys.Send("a");
-                mouseClickL();
-                System.Threading.Thread.Sleep(10);
-            }
-            mouseClickR();
-            mouseClickL();
-        }
-
         private void BuildAOE4Houses()
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 10; i++)
             {
                 SendKeys.Send("q");
                 SendKeys.Send("q");
                 mouseClickL();
             }
             mouseClickL();
-        }
-
-        private void BuildAOE4HousesSlow()
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                SendKeys.Send("q");
-                SendKeys.Send("q");
-                mouseClickL();
-                System.Threading.Thread.Sleep(10);
-            }
-            mouseClickL();
-        }
-
-        private void TrainAOE4()
-        {
-            for (int i = 0; i < 15; i++)
-            {
-                mouseClickL();
-            }
         }
 
         protected override void WndProc(ref Message m)
@@ -165,11 +121,5 @@ namespace PowerKeys
 
             base.WndProc(ref m);
         }
-
-        private void Write(string msg)
-        {
-            System.Diagnostics.Debug.WriteLine(msg);
-        }
-
     }
 }
