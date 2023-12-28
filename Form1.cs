@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace PowerKeys
 {
-    public partial class Form1 : Form
+    public partial class mainForm : Form
     {
 
         #region keyboard
@@ -40,7 +40,7 @@ namespace PowerKeys
         List<Hotkeys.GlobalHotkey> AllKeys = new List<Hotkeys.GlobalHotkey>();
         private readonly Hotkeys.GlobalHotkey ghk;
 
-        public Form1()
+        public mainForm()
         {
             InitializeComponent();
             ghk = new Hotkeys.GlobalHotkey(Keys.BrowserHome, this);
@@ -55,12 +55,10 @@ namespace PowerKeys
         #region unregister all keys
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (!ghk.Unregiser())
-                {
-                    MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
-                }
+                this.Hide();
+                e.Cancel = true;
             }
         }
         #endregion
@@ -120,6 +118,24 @@ namespace PowerKeys
             }
 
             base.WndProc(ref m);
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
+            {
+                if (!ghk.Unregiser())
+                {
+                    MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
+                }
+            }
+            Application.Exit();
         }
     }
 }
