@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -50,13 +51,13 @@ namespace PowerKeys
             ghk.Register();
             AllKeys.Add(ghk);
 
-            ghk = new Hotkeys.GlobalHotkey(Keys.BrowserRefresh, this);
-            ghk.Register();
+            /*ghk = new Hotkeys.GlobalHotkey(Keys.BrowserBack, this);
+            /ghk.Register();
             AllKeys.Add(ghk);
 
             ghk = new Hotkeys.GlobalHotkey(Keys.LaunchApplication1, this);
             ghk.Register();
-            AllKeys.Add(ghk);
+            AllKeys.Add(ghk);*/
         }
 
         #region unregister all keys
@@ -136,25 +137,28 @@ namespace PowerKeys
             mouseClickL();
         }
 
+        private void TrainAOE4()
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                mouseClickL();
+            }
+        }
+
         protected override void WndProc(ref Message m)
         {
 
             if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
             {
                 Keys key = (Keys)m.WParam;
+                Console.WriteLine(key);
                 switch (key)
                 {
                     case Keys.BrowserHome:
-                        BuildAOE4Farms();
-                        break;
-                    case Keys.LaunchMail:
                         BuildAOE4Houses();
                         break;
-                    case Keys.BrowserRefresh:
-                        BuildAOE4FarmsSlow();
-                        break;
-                    case Keys.LaunchApplication1:
-                        BuildAOE4HousesSlow();
+                    case Keys.LaunchMail:
+                        BuildAOE4Farms();
                         break;
                 }
             }
