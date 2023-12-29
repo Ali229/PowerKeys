@@ -156,5 +156,19 @@ namespace PowerKeys
         {
             System.Diagnostics.Debug.WriteLine(msg);
         }
+
+        private void activeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (active.Checked == true)
+            {
+                UnRegister();
+                active.Checked = false;
+            }
+            else
+            {
+                Register();
+                active.Checked = true;
+            }
+        }
     }
 }
