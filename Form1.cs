@@ -11,17 +11,17 @@ namespace PowerKeys
         #region keyboard
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void keybd_event(uint bVk, uint bScan, uint dwFlags, uint dwExtraInfo);
-
-        private const int VK_LSHIFT = 0xA0;
-        const int KEY_DOWN_EVENT = 0x0000; //Key down flag
-        const int KEY_UP_EVENT = 0x0002; //Key up flag
+        public const byte KEYBDEVENTF_SHIFTVIRTUAL = 0x10;
+        public const byte KEYBDEVENTF_SHIFTSCANCODE = 0x2A;
+        public const int KEYBDEVENTF_KEYDOWN = 0;
+        public const int KEYBDEVENTF_KEYUP = 2;
         public static void ShiftD()
         {
-            keybd_event(VK_LSHIFT, 0, KEY_DOWN_EVENT, 0);
+            keybd_event(KEYBDEVENTF_SHIFTVIRTUAL, KEYBDEVENTF_SHIFTSCANCODE, KEYBDEVENTF_KEYDOWN, 0);
         }
         public static void ShiftU()
         {
-            keybd_event(VK_LSHIFT, 0, KEY_UP_EVENT, 0);
+            keybd_event(KEYBDEVENTF_SHIFTVIRTUAL, KEYBDEVENTF_SHIFTSCANCODE, KEYBDEVENTF_KEYUP, 0);
         }
         #endregion
         #region mouse
@@ -47,7 +47,7 @@ namespace PowerKeys
             ghk.Register();
             AllKeys.Add(ghk);
 
-            ghk = new Hotkeys.GlobalHotkey(Keys.LaunchMail, this);
+            ghk = new Hotkeys.GlobalHotkey(Keys.Oemtilde, this);
             ghk.Register();
             AllKeys.Add(ghk);
         }
@@ -62,7 +62,6 @@ namespace PowerKeys
             }
         }
         #endregion
-
         private void mouseClickL()
         {
             mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP);
@@ -75,43 +74,45 @@ namespace PowerKeys
 
         private void BuildAOE4Farms()
         {
+            mouseClickR(); //Prevent villager from initial shift queue
             SendKeys.Send("q");
             SendKeys.Send("w");
             mouseClickL();
+            SendKeys.Send("q");
+            SendKeys.Send("a");
+            ShiftD();
             for (int i = 0; i < 8; i++)
             {
-                SendKeys.Send("q");
-                SendKeys.Send("a");
                 mouseClickL();
             }
-            mouseClickR();
-            mouseClickL();
+            ShiftU();
         }
 
         private void BuildAOE4Houses()
         {
+            mouseClickR(); //Prevent villager from initial shift queue
+            SendKeys.Send("q");
+            SendKeys.Send("q");
+            ShiftD();
             for (int i = 0; i < 10; i++)
             {
-                SendKeys.Send("q");
-                SendKeys.Send("q");
                 mouseClickL();
             }
-            mouseClickL();
+            ShiftU();
         }
 
         protected override void WndProc(ref Message m)
         {
-
             if (m.Msg == Hotkeys.Constants.WM_HOTKEY_MSG_ID)
             {
                 Keys key = (Keys)m.WParam;
-                Console.WriteLine(key);
+                //Write(key.ToString());
                 switch (key)
                 {
                     case Keys.BrowserHome:
                         BuildAOE4Houses();
                         break;
-                    case Keys.LaunchMail:
+                    case Keys.Oemtilde:
                         BuildAOE4Farms();
                         break;
                 }
@@ -128,14 +129,32 @@ namespace PowerKeys
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            UnRegister();
+            Application.Exit();
+        }
+
+        private void UnRegister()
+        {
             foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
             {
-                if (!ghk.Unregiser())
+                if (!ghk.Unregister())
                 {
                     MessageBox.Show("PowerKeys failed to unregister! Try ending from Task Manager.");
                 }
             }
-            Application.Exit();
+        }
+
+        private void Register()
+        {
+            foreach (Hotkeys.GlobalHotkey ghk in AllKeys)
+            {
+                ghk.Register();
+            }
+        }
+
+        private void Write(string msg)
+        {
+            System.Diagnostics.Debug.WriteLine(msg);
         }
     }
 }
